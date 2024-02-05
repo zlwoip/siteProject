@@ -1,0 +1,83 @@
+@import "~normalize.css/normalize.css";
+@import "./transition.css";
+@import "./ele-themes/blue/index.css";
+@import "./ele-themes/red/index.css";
+@import "./ele-themes/cyan/index.css";
+@import "./ele-themes/purple/index.css";
+
+html,
+body,
+#app {
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 4px;
+  background-color: #1961C5;
+  background-image: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #ededed;
+  border-radius: 10px;
+}
+
+.touch {
+  cursor: pointer;
+}
+
+.clear {
+  clear: both
+}
+
+.ellipsis {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  text-overflow: ellipsis;
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(100, 100, 100, 0.4);
+}
+@keyframes aj{
+  0%{transform: scale(1)rotate(45deg);}
+  50%{transform: scale(1.1)rotate(45deg);}
+  100%{transform: scale(1)rotate(45deg);}
+}
+.color-dot {
+  width: 10px;
+  height: 10px;
+  float: left;
+  position: relative;
+  left: 15px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 1px 2px 8px 0 rgba(0,0,0,0.12);
+  animation: 1s aj infinite;
+}
+.link-text:hover {
+  color: #3a8ee6;
+}
