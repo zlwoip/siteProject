@@ -1,9 +1,6 @@
 <template>
   <div class="login-container">
-    <div
-      ref="loginWrapper"
-      class="login-bg-wrapper"
-    >
+    <div ref="loginWrapper" class="login-bg-wrapper">
       <img :src="$isMobile ? ImageMobileBg1 : ImageBg1" />
     </div>
     <div class="flex form-wrapper">
@@ -17,35 +14,17 @@
         </div>
         <div class="form-container">
           <div class="item-wrapper">
-            <el-input
-              v-model="username"
-              placeholder="请输入用户名/手机号"
-              prefix-icon="el-icon-user"
-              clearable
-            />
+            <el-input v-model="username" placeholder="请输入用户名/手机号" prefix-icon="el-icon-user" clearable />
           </div>
           <div class="item-wrapper margin-top-lg">
-            <el-input
-              v-model="password"
-              placeholder="请输入密码"
-              type="password"
-              clearable
-              prefix-icon="el-icon-lock"
-            />
+            <el-input v-model="password" placeholder="请输入密码" type="password" clearable prefix-icon="el-icon-lock" />
           </div>
           <div class="item-wrapper">
-            <VawVerify
-              class="margin-top-lg"
-              @verify-success="onVerifySuccess"
-            />
+            <VawVerify class="margin-top-lg" @verify-success="onVerifySuccess" />
           </div>
           <div class="flex-sub"></div>
           <div class="margin-top-lg">
-            <el-button
-              type="primary"
-              class="login"
-              @click="login"
-            >
+            <el-button type="primary" class="login" @click="login">
               登录
             </el-button>
           </div>
@@ -53,11 +32,7 @@
         <div class="my-width flex-sub margin-top">
           <div class="flex justify-between" style="display: none">
             <el-checkbox v-model="autoLogin">自动登录</el-checkbox>
-            <el-link
-              :underline="false"
-              type="primary"
-            >忘记密码？
-            </el-link>
+            <el-link :underline="false" type="primary">忘记密码？</el-link>
           </div>
         </div>
       </div>
@@ -81,7 +56,7 @@ export default {
   components: { PageFooter, VawVerify },
   data() {
     return {
-      username: 'zhangliwei',
+      username: 'admin',
       password: 'WHgd@0631',
       ImageBg1,
       ImageMobileBg1,
@@ -122,18 +97,19 @@ export default {
         this.$errorMsg('滑动验证失败')
         return
       }
-      this.$post({
+      this.$httpPost({
         url: this.$urlPath.login,
+        dataType: 'json',
         data: {
-          username: this.username,
-          pwds: this.password
+          userName: this.username,
+          password: this.password
           // authLogin: this.authLogin ? '1' : '0'
         }
       }).then((res) => {
-        this.$successMsg(res.Message)
         this.$store
           .dispatch('user/saveUserInfo', res)
           .then((_) => {
+            this.$successMsg('登录成功！')
             this.$router.push({ path: this.redirect || '/index/main' })
           })
           .catch((error) => {

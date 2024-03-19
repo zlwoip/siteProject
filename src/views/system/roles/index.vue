@@ -1,28 +1,18 @@
- <template>
+<template>
   <div class="main-container">
     <div class="table-header-container">
       <el-card :body-style="{padding: '0'}" shadow="never">
         <div class="wrapper">
           <div class="left-wrapper">
             <span class="label">数据检索条件:</span>
-            <el-input v-model="query.upsName" clearable size="mini" placeholder="请输入设备名称" style="width: 150px;margin:0 5px" />
-            <el-input v-model="query.upsIP" clearable size="mini" placeholder="请输入设备IP" style="width: 150px;margin:0 5px" />
-            <el-select v-model="query.branch" clearable size="mini" placeholder="请选择所属分管单位" style="width: 160px;margin:0 5px">
-              <el-option v-for="item in dw_type" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-            <el-select v-model="query.upsLevel" clearable size="mini" placeholder="请选择电源等级" style="width: 180px;margin:0 5px">
-              <el-option v-for="item in dj_type" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-            <el-select v-model="query.upsType" clearable size="mini" placeholder="请选择电源类型" style="width: 130px;margin:0 5px">
-              <el-option v-for="item in dy_type" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            <el-input v-model="query.name" clearable size="mini" placeholder="请输入角色名称" style="width: 150px;margin:0 5px" />
           </div>
           <div class="flex-sub">
             <el-button type="primary" size="mini" icon="el-icon-magic-stick" @click="toSearch">查询</el-button>
             <el-button size="mini" icon="el-icon-refresh-left" @click="clearLimit">重置</el-button>
           </div>
           <div class="right-wrapper">
-            <el-button type="primary" size="mini" icon="el-icon-plus" @click="toAdd">新增设备</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-plus" @click="toAdd">新增</el-button>
           </div>
         </div>
       </el-card>
@@ -30,13 +20,13 @@
     <el-card :body-style="{padding: 0}" class="table-container" shadow="never">
       <div class="wrapper" style="overflow: hidden">
         <el-table v-loading="loading" :data="tableList" size="mini" stripe tooltip-effect="dark" height="calc(70vh - 42px)">
-          <el-table-column type="index" width="60" label="序号" align="center" :index="indexMethod" />
-          <el-table-column prop="upsName" label="电源名称" align="center" sortable />
-          <el-table-column prop="upsIP" label="IP地址" align="center" sortable />
-          <el-table-column prop="branch" label="所属分管单位" align="center" sortable />
-          <el-table-column prop="upsLevel" label="电源等级" align="center" width="220" sortable />
-          <el-table-column prop="upsType" label="电源类型" align="center" sortable />
-          <el-table-column prop="maintenanceTime" label="最后维护日期" align="center" width="150" sortable />
+          <el-table-column prop="id" label="ID" width="160" />
+          <el-table-column prop="name" label="角色名称" />
+          <el-table-column label="最后维护日期" width="180">
+            <template slot-scope="scope">
+              <span class="text-grey">{{ scope.row.cTime || getDateTime() }}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" align="center" width="120">
             <template slot-scope="scope">
               <el-tooltip content="编辑"><el-button round plain type="primary" size="mini" icon="el-icon-edit-outline" @click="toEdit(scope.row)" /></el-tooltip>
@@ -54,36 +44,18 @@
 
 <script>
 import editPage from './edit'
+
 export default {
   components: { editPage },
   data() {
     return {
       waterMark: '',
-      dw_type: [
-        { label: '市公司', value: '市公司' },
-        { label: '环翠分公司', value: '环翠分公司' },
-        { label: '高区分公司', value: '高区分公司' },
-        { label: '经区分公司', value: '经区分公司' }
-      ],
-      dj_type: [
-        { label: '总前端120KVA', value: '总前端120KVA' },
-        { label: '一级分前端10KVA', value: '一级分前端10KVA' },
-        { label: '二级分前端及乡镇广播站10KVA', value: '二级分前端及乡镇广播站10KVA' }
-      ],
-      dy_type: [
-        { label: '三相电压', value: '三相电压' },
-        { label: '标准电压', value: '标准电压' }
-      ],
       loading: false,
       page: 1,
       pageSize: 20,
       total: 0,
       query: {
-        upsName: '',
-        upsIP: '',
-        branch: '',
-        upsLevel: '',
-        upsType: ''
+        name: ''
       },
       tableData: [],
       tableList: []
@@ -95,6 +67,12 @@ export default {
     })
   },
   methods: {
+    getDateTime(now) {
+      if (!now) {
+        now = new Date()
+      }
+      return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`
+    },
     indexMethod(index) {
       return 1 + index + this.page * this.pageSize - this.pageSize
     },
@@ -105,18 +83,18 @@ export default {
       this.$refs.editPage.loadData(item)
     },
     toDelete(item) {
-      this.$confirm(`确认删除“${item.upsName}”电源设备吗?`, '提示', {
+      this.$confirm(`确认删除“${item.name}”吗?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$post({
-          url: this.$urlPath.deleteUps,
+        this.$httpPost({
+          url: this.$urlPath.DeleteRole + '?departmentId=' + item.departmentId,
           data: {
-            id: item.id
+            departmentId: item.departmentId
           }
         }).then((res) => {
-          this.$successMsg(res.msg)
+          this.$successMsg(res || '操作成功')
           this.loadData()
         }).catch((error) => {
           this.$errorMsg(error || '接口调用失败，未知异常')
@@ -128,7 +106,9 @@ export default {
       this.loadData()
     },
     clearLimit() {
-      this.query = {}
+      this.query = {
+        operationroleid: ''
+      }
       this.loadData()
     },
     pageChange(e) {
@@ -141,45 +121,20 @@ export default {
       this.loadData()
     },
     dataFilter() {
-      if (this.query.upsName) {
-        this.tableData = this.tableData.filter(item => {
-          return item.upsName.indexOf(this.query.upsName) >= 0
-        })
-      }
-      if (this.query.upsIP) {
-        this.tableData = this.tableData.filter(item => {
-          return item.upsIP.indexOf(this.query.upsIP) >= 0
-        })
-      }
-      if (this.query.branch) {
-        this.tableData = this.tableData.filter(item => {
-          return item.branch.indexOf(this.query.branch) >= 0
-        })
-      }
-      if (this.query.upsLevel) {
-        this.tableData = this.tableData.filter(item => {
-          return item.upsLevel.indexOf(this.query.upsLevel) >= 0
-        })
-      }
-      if (this.query.upsType) {
-        this.tableData = this.tableData.filter(item => {
-          return item.upsType.indexOf(this.query.upsType) >= 0
-        })
-      }
       this.total = this.tableData.length
       this.tableList = this.tableData.slice((this.page - 1) * this.pageSize, this.page * this.pageSize)
     },
     loadData() {
       this.tableList = []
-      this.$post({
-        url: this.$urlPath.ShowUpsList,
+      this.$httpGet({
+        url: this.$urlPath.GetRoles,
         data: {
           page: this.page,
           pageSize: this.pageSize,
           ...this.query
         }
       }).then((res) => {
-        this.tableData = res.ShowUps || []
+        this.tableData = res || []
         this.dataFilter()
       }).catch((error) => {
         this.$errorMsg(error || '接口调用失败，未知异常')
@@ -199,6 +154,7 @@ export default {
 
     .left-wrapper {
       margin-left: 15px;
+      min-width: 780px;
     }
 
     .flex-sub {

@@ -40,7 +40,21 @@ body,
   background: #ededed;
   border-radius: 10px;
 }
-
+.name-list {
+  width: 100%;
+  text-align: center;
+}
+.add-btn {
+  color: #047fff;
+  font-size: 14px;
+  opacity: 0.6;
+}
+.add-btn:hover {
+  opacity: 1;
+}
+.tag-label {
+  margin: 2px 5px;
+}
 .touch {
   cursor: pointer;
 }

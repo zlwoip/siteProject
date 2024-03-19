@@ -63,7 +63,7 @@ function generatorRoutes(res) {
 }
 
 function isTokenExpired() {
-  const token = Cookies.get('admin-token')
+  const token = Cookies.get('user-token')
   return !!token
 }
 
@@ -100,17 +100,21 @@ router.beforeEach((to, from, next) => {
             ]
           },
           {
-            menuUrl: '/device',
-            menuName: '设备运维',
+            menuUrl: '/system',
+            menuName: '系统管理',
             icon: 'list',
             children: [
               {
-                menuUrl: '/device/switchboard/index',
-                menuName: '交换机设备'
+                menuUrl: '/system/depts/index',
+                menuName: '部门管理'
               },
               {
-                menuUrl: '/device/ups/index',
-                menuName: 'UPS设备'
+                menuUrl: '/system/roles/index',
+                menuName: '角色管理'
+              },
+              {
+                menuUrl: '/system/user/index',
+                menuName: '用户管理'
               }
             ]
           }

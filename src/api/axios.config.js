@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import qs from 'qs'
+import * as user from '@/utils/auth'
 
 // const baseIp = 'http://10.253.183.170/'
 
@@ -22,14 +23,14 @@ service.interceptors.request.use(
   config => {
     !config.headers && (config.headers = {})
     if (!config.headers[CONTENT_TYPE]) {
-      config.headers[CONTENT_TYPE] = FORM_URLENCODED
+      config.headers[CONTENT_TYPE] = APPLICATION_JSON
     }
     if (config.headers[CONTENT_TYPE] === FORM_URLENCODED) {
       config.data = qs.stringify(config.data)
     }
-    // if (user.getToken()) {
-    //   config.headers['Authorization'] = 'token_' + user.getToken()
-    // }
+    if (user.getToken() && user.getToken() !== 'undefined') {
+      config.headers['Authorization'] = 'Bearer ' + user.getToken()
+    }
     return config
   },
   error => {

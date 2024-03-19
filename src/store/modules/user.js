@@ -55,14 +55,14 @@ const actions = {
 const mutations = {
   SAVE_USER_INFO(state, userInfo) {
     state.userId = userInfo.UserID
-    state.userName = userInfo.UserName
+    state.userName = userInfo.userName
     state.userNickName = userInfo.RealName
     state.avatar = userInfo.avatar
     state.roleId = userInfo.Role
-    state.roles = userInfo.RoleName
-    state.token = userInfo.token
-    localStorage.setItem('userInfo', JSON.stringify(userInfo))
-    Cookies.set('admin-token', userInfo.token, {
+    state.roles = userInfo.roleNames
+    state.token = userInfo.jwtToken
+    localStorage.setItem('userInfo', JSON.stringify(state))
+    Cookies.set('user-token', state.token, {
       expires: 1
     })
   },
@@ -76,7 +76,7 @@ const mutations = {
     state.avatar = ''
     state.token = ''
     resetRouter()
-    Cookies.remove('admin-token')
+    Cookies.remove('user-token')
     localStorage.removeItem('userInfo')
   }
 }
