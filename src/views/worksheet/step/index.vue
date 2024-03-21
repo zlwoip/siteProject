@@ -89,14 +89,12 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$httpPost({
-          url: this.$urlPath.DeleteRole,
-          data: item
-        }).then((res) => {
-          if (res.code !== 200) {
-            this.$errorMsg(res.msg || '接口调用失败，未知异常')
-          } else {
-            this.$successMsg(res.msg || '操作成功')
+          url: this.$urlPath.DeleteRole + '?departmentId=' + item.departmentId,
+          data: {
+            departmentId: item.departmentId
           }
+        }).then((res) => {
+          this.$successMsg(res || '操作成功')
           this.loadData()
         }).catch((error) => {
           this.$errorMsg(error || '接口调用失败，未知异常')
@@ -109,7 +107,7 @@ export default {
     },
     clearLimit() {
       this.query = {
-        name: ''
+        operationroleid: ''
       }
       this.loadData()
     },
@@ -136,10 +134,7 @@ export default {
           ...this.query
         }
       }).then((res) => {
-        if (res.code !== 200) {
-          this.$errorMsg(res.msg || '接口调用失败，未知异常')
-        }
-        this.tableData = res.data || []
+        this.tableData = res || []
         this.dataFilter()
       }).catch((error) => {
         this.$errorMsg(error || '接口调用失败，未知异常')

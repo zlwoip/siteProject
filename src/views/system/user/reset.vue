@@ -51,9 +51,13 @@ export default {
               ...this.formData
             }
           }).then((res) => {
-            this.$successMsg(res || '操作成功')
-            this.cancelView()
-            this.$parent.loadData()
+            if (res.code !== 200) {
+              this.$errorMsg(res.msg || '接口调用失败，未知异常')
+            } else {
+              this.$successMsg(res || '操作成功')
+              this.cancelView()
+              this.$parent.loadData()
+            }
           }).catch((error) => {
             this.$errorMsg(error || '接口调用失败，未知异常')
           })

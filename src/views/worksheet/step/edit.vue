@@ -2,14 +2,9 @@
   <!-- 表单渲染 -->
   <el-dialog append-to-body :close-on-click-modal="false" :before-close="cancelView" :visible="visible" :title="title" width="540px">
     <el-form ref="formViewRef" :model="formData" :rules="rules" :status-icon="true" label-width="200px">
-      <el-form-item label="部门名称：" class="form-cell" prop="departmentName">
+      <el-form-item label="角色名称：" class="form-cell" prop="name">
         <div class="cell-box">
-          <el-input v-model="formData.departmentName" size="mini" placeholder="单行文本输入" class="cell-input" />
-        </div>
-      </el-form-item>
-      <el-form-item label="上级部门：" class="form-cell" prop="parentDepartmentId">
-        <div class="cell-box">
-          <el-cascader v-model="pids" :options="deptList" :show-all-levels="false" :props="{value:'departmentId',label:'departmentName',children:'childDepartments',checkStrictly:true }" size="mini" placeholder="无" class="cell-input" />
+          <el-input v-model="formData.name" size="mini" placeholder="单行文本输入" class="cell-input" />
         </div>
       </el-form-item>
     </el-form>
@@ -25,15 +20,12 @@ export default {
   data() {
     return {
       visible: false,
-      title: '部门信息',
-      deptList: [],
-      pids: [],
+      title: '角色信息',
       formData: {
-        departmentName: '',
-        parentDepartmentId: ''
+        name: ''
       },
       rules: {
-        departmentName: { required: true, message: '请填写部门名称', trigger: 'blur' }
+        name: { required: true, message: '请填写角色名称', trigger: 'blur' }
       }
     }
   },
@@ -52,22 +44,15 @@ export default {
     submitForm(isRelease) {
       this.$refs.formViewRef.validate((valid, obj) => {
         if (valid) {
-          if (this.pids.length) {
-            this.formData.parentDepartmentId = this.pids[this.pids.length - 1]
-          }
           this.$httpPost({
-            url: this.formData.departmentId ? this.$urlPath.UpdateDepartment : this.$urlPath.Department,
+            url: this.formData.id ? this.$urlPath.UpdateRole : this.$urlPath.AddRole,
             data: {
               ...this.formData
             }
           }).then((res) => {
-            if (res.code !== 200) {
-              this.$errorMsg(res.msg || '接口调用失败，未知异常')
-            } else {
-              this.$successMsg(res.msg || '操作成功')
-              this.cancelView()
-              this.$parent.loadData()
-            }
+            this.$successMsg(res || '操作成功')
+            this.cancelView()
+            this.$parent.loadData()
           }).catch((error) => {
             this.$errorMsg(error || '接口调用失败，未知异常')
           })
@@ -80,15 +65,11 @@ export default {
       })
     },
     loadData(item) {
-      this.deptList = this.$parent.tableData
       if (item) {
-        this.pids = item.pids || []
         this.formData = item
       } else {
-        this.pids = []
         this.formData = {
-          departmentName: '',
-          parentDepartmentId: ''
+          name: ''
         }
       }
       this.showView()

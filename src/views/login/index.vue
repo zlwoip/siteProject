@@ -109,7 +109,7 @@ export default {
         this.$store
           .dispatch('user/saveUserInfo', res)
           .then((_) => {
-            this.$successMsg('登录成功！')
+            this.$successMsg(res.msg || '登录成功！')
             this.$router.push({ path: this.redirect || '/index/main' })
           })
           .catch((error) => {

@@ -11,9 +11,14 @@ export const GetRoles = '/api/Users/GetRoles'
 export const UpdateRole = '/api/Users/UpdateRole'
 export const AddRole = '/api/Users/AddRole'
 export const DeleteRole = '/api/Users/DeleteRole'
-
 export const GetUsers = '/api/Users/GetUsers'
 export const AdministratorAddUser = '/api/Users/AdministratorAddUser'
 export const UpdateUser = '/api/Users/UpdateUser'
 export const ResetPassword = '/api/Users/ResetPassword'
 export const DeleteUser = '/api/Users/DeleteUser'
+
+export const GetWorkSheetType = '/api/WorkSheet/GetWorkSheetType'
+export const AddWorkSheetType = '/api/WorkSheet/AddWorkSheetType'
+export const UpdateWorkSheetType = '/api/WorkSheet/UpdateWorkSheetType'
+export const DeleteWorkSheetType = '/api/WorkSheet/DeleteWorkSheetType'
+

@@ -44,7 +44,6 @@
 
 <script>
 import editPage from './edit'
-import {DeleteDepartment} from "@/api/url";
 
 export default {
   components: { editPage },
@@ -95,7 +94,11 @@ export default {
             departmentId: item.departmentId
           }
         }).then((res) => {
-          this.$successMsg(res || '操作成功')
+          if (res.code !== 200) {
+            this.$errorMsg(res.msg || '接口调用失败，未知异常')
+          } else {
+            this.$successMsg(res.msg || '操作成功')
+          }
           this.loadData()
         }).catch((error) => {
           this.$errorMsg(error || '接口调用失败，未知异常')
@@ -108,7 +111,7 @@ export default {
     },
     clearLimit() {
       this.query = {
-        operationroleid: ''
+        departmentName: ''
       }
       this.loadData()
     },
@@ -135,7 +138,10 @@ export default {
           ...this.query
         }
       }).then((res) => {
-        this.tableData = res || []
+        if (res.code !== 200) {
+          this.$errorMsg(res.msg || '接口调用失败，未知异常')
+        }
+        this.tableData = res.data || []
         this.dataFilter()
       }).catch((error) => {
         this.$errorMsg(error || '接口调用失败，未知异常')

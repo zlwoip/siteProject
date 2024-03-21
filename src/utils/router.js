@@ -85,17 +85,17 @@ router.beforeEach((to, from, next) => {
         const accessRoutes = []
         const routes = generatorRoutes([
           {
-            menuUrl: '/inspection',
-            menuName: '设备巡检',
+            menuUrl: '/worksheet',
+            menuName: '流程管理',
             icon: 'list',
             children: [
               {
-                menuUrl: '/inspection/switchboard/index',
-                menuName: '交换机巡检'
+                menuUrl: '/worksheet/type/index',
+                menuName: '流程类型'
               },
               {
-                menuUrl: '/inspection/ups/index',
-                menuName: 'UPS巡检'
+                menuUrl: '/worksheet/step/index',
+                menuName: '节点步骤'
               }
             ]
           },
